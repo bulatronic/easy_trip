@@ -27,6 +27,8 @@ services:
 
   postgres:
     image: postgres:15-alpine
+    ports:
+      - "5432:5432"
     container_name: easy_trip_db
     restart: unless-stopped
     environment:
@@ -35,6 +37,17 @@ services:
       POSTGRES_DB: easy_trip
     volumes:
       - db_data:/var/lib/postgresql/data
+
+# Временно добавил для просмотра БД
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    restart: unless-stopped
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
 
 volumes:
   db_data:
