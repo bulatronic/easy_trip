@@ -6,13 +6,15 @@ use App\Infrastructure\Repository\LocationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: LocationRepository::class)]
 #[ORM\Table(name: 'locations')]
 class Location
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::BIGINT, unique: true)]
     #[ORM\CustomIdGenerator(class: 'doctrine.id_generator_identity')]
+    #[ORM\Index(name: 'location__name__idx', columns: ['name'])]
+    #[ORM\Index(name: 'location__type__idx', columns: ['type'])]
+    #[ORM\Index(name: 'location__coordinates__idx', columns: ['latitude', 'longitude'])]
     private ?int $id = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 255)]

@@ -10,13 +10,8 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250119155339 extends AbstractMigration
+final class Version20250125115646 extends AbstractMigration
 {
-    public function getDescription(): string
-    {
-        return '';
-    }
-
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
@@ -24,6 +19,9 @@ final class Version20250119155339 extends AbstractMigration
         $this->addSql('CREATE INDEX booking__trip_id__idx ON bookings (trip_id)');
         $this->addSql('CREATE INDEX booking__passenger_id__idx ON bookings (passenger_id)');
         $this->addSql('CREATE TABLE locations (id BIGINT NOT NULL, name VARCHAR(255) NOT NULL, type VARCHAR(50) NOT NULL, latitude NUMERIC(10, 8) NOT NULL, longitude NUMERIC(11, 8) NOT NULL, PRIMARY KEY(id))');
+        $this->addSql('CREATE INDEX location__name__idx ON locations (name)');
+        $this->addSql('CREATE INDEX location__type__idx ON locations (type)');
+        $this->addSql('CREATE INDEX location__coordinates__idx ON locations (latitude, longitude)');
         $this->addSql('CREATE TABLE reviews (id BIGINT NOT NULL, user_id BIGINT NOT NULL, trip_id BIGINT NOT NULL, rating INT NOT NULL, comment TEXT DEFAULT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, updated_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))');
         $this->addSql('CREATE INDEX review__user_id__idx ON reviews (user_id)');
         $this->addSql('CREATE INDEX review__trip_id__idx ON reviews (trip_id)');

@@ -2,11 +2,9 @@
 
 namespace App\Domain\Entity;
 
-use App\Infrastructure\Repository\BookingRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: BookingRepository::class)]
 #[ORM\Table(name: 'bookings')]
 #[ORM\Index(name: 'booking__trip_id__idx', columns: ['trip_id'])]
 #[ORM\Index(name: 'booking__passenger_id__idx', columns: ['passenger_id'])]

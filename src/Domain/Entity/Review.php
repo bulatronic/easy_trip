@@ -2,11 +2,9 @@
 
 namespace App\Domain\Entity;
 
-use App\Infrastructure\Repository\ReviewRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: ReviewRepository::class)]
 #[ORM\Table(name: 'reviews')]
 #[ORM\Index(name: 'review__user_id__idx', columns: ['user_id'])]
 #[ORM\Index(name: 'review__trip_id__idx', columns: ['trip_id'])]

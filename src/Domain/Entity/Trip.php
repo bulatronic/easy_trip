@@ -2,13 +2,11 @@
 
 namespace App\Domain\Entity;
 
-use App\Infrastructure\Repository\TripRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: TripRepository::class)]
 #[ORM\Table(name: 'trips')]
 #[ORM\Index(name: 'trip__driver_id__idx', columns: ['driver_id'])]
 #[ORM\Index(name: 'trip__start_location_id__idx', columns: ['start_location_id'])]
