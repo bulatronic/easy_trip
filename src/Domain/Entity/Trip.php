@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
 #[ORM\Table(name: 'trips')]
 #[ORM\Index(name: 'trip__driver_id__idx', columns: ['driver_id'])]
 #[ORM\Index(name: 'trip__start_location_id__idx', columns: ['start_location_id'])]
@@ -15,7 +16,7 @@ class Trip
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::BIGINT, unique: true)]
-    #[ORM\CustomIdGenerator(class: 'doctrine.id_generator_identity')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'trips')]

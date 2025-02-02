@@ -5,6 +5,7 @@ namespace App\Domain\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
 #[ORM\Table(name: 'bookings')]
 #[ORM\Index(name: 'booking__trip_id__idx', columns: ['trip_id'])]
 #[ORM\Index(name: 'booking__passenger_id__idx', columns: ['passenger_id'])]
@@ -12,7 +13,7 @@ class Booking
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::BIGINT, unique: true)]
-    #[ORM\CustomIdGenerator(class: 'doctrine.id_generator_identity')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private ?int $id = null;
 
     #[ORM\ManyToOne(targetEntity: Trip::class, inversedBy: 'bookings')]
