@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'trip__driver_id__idx', columns: ['driver_id'])]
 #[ORM\Index(name: 'trip__start_location_id__idx', columns: ['start_location_id'])]
 #[ORM\Index(name: 'trip__end_location_id__idx', columns: ['end_location_id'])]
-class Trip
+class Trip implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::BIGINT, unique: true)]

@@ -3,12 +3,28 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Trip;
+use App\Domain\Repository\TripRepositoryInterface;
 
 /**
  * @extends AbstractRepository<Trip>
  */
-class TripRepository extends AbstractRepository
+class TripRepository extends AbstractRepository implements TripRepositoryInterface
 {
+    public function add(Trip $trip): int
+    {
+        return $this->save($trip);
+    }
+
+    public function update(Trip $trip): int
+    {
+        return $this->save($trip);
+    }
+
+    public function remove(Trip $trip): void
+    {
+        $this->delete($trip);
+    }
+
     // поиск поездок по водителю
     public function findByDriver(int $driverId): array
     {
@@ -59,5 +75,10 @@ class TripRepository extends AbstractRepository
             'end_location_id' => $endLocationId,
             'departure_time' => $departureTime,
         ]);
+    }
+
+    public function findById(int $id): ?Trip
+    {
+        return $this->em->getRepository(Trip::class)->find($id);
     }
 }
