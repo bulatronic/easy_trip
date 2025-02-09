@@ -12,7 +12,7 @@ class BookingRepository extends AbstractRepository
     // поиск бронирования по поездке
     public function findByTripId(int $tripId): array
     {
-        return $this->entityManager->getRepository(Booking::class)->findBy([
+        return $this->em->getRepository(Booking::class)->findBy([
             'trip_id' => $tripId,
         ]);
     }
@@ -20,7 +20,7 @@ class BookingRepository extends AbstractRepository
     // поиск бронирований по пассажиру
     public function findByUserId(int $userId): array
     {
-        return $this->entityManager->getRepository(Booking::class)->findBy([
+        return $this->em->getRepository(Booking::class)->findBy([
             'passenger_id' => $userId,
         ]);
     }
@@ -28,7 +28,7 @@ class BookingRepository extends AbstractRepository
     // поиск бронирований по статусу
     public function findByStatus(string $status): array
     {
-        return $this->entityManager->getRepository(Booking::class)->findBy([
+        return $this->em->getRepository(Booking::class)->findBy([
             'status' => $status,
         ]);
     }
@@ -36,7 +36,7 @@ class BookingRepository extends AbstractRepository
     // поиск бронирований по дате
     public function findByDate(\DateTime $date): array
     {
-        return $this->entityManager->getRepository(Booking::class)->findBy([
+        return $this->em->getRepository(Booking::class)->findBy([
             'created_at' => $date,
         ]);
     }

@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Index(name: 'location__name__idx', columns: ['name'])]
 #[ORM\Index(name: 'location__type__idx', columns: ['type'])]
 #[ORM\Index(name: 'location__coordinates__idx', columns: ['latitude', 'longitude'])]
-class Location
+class Location implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::BIGINT, unique: true)]
