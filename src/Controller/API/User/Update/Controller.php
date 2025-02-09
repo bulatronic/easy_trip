@@ -13,7 +13,7 @@ class Controller extends AbstractController
     ) {
     }
 
-    #[Route('/api/user/{id}', name: 'api_user_update', requirements: ['id' => '\d+'], methods: ['PATCH'])]
+    #[Route('/api/user/{id}', name: 'api_user_update', requirements: ['id' => '\d+'], methods: ['PUT'])]
     public function __invoke(int $id, #[MapRequestPayload] InputUserDTO $dto): OutputUserDTO
     {
         return $this->manager->update($id, $dto);

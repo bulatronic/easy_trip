@@ -6,7 +6,7 @@ use App\Domain\Entity\User;
 
 interface UserRepositoryInterface
 {
-    public function create(User $user): int;
+    public function add(User $user): int;
 
     public function update(User $user): int;
 

@@ -10,7 +10,7 @@ use App\Domain\Repository\UserRepositoryInterface;
  */
 class UserRepository extends AbstractRepository implements UserRepositoryInterface
 {
-    public function create(User $user): int
+    public function add(User $user): int
     {
         return $this->save($user);
     }

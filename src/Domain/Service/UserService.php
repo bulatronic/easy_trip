@@ -23,7 +23,7 @@ readonly class UserService
         $user->setPassword($model->password);
         $user->setRole($model->role);
         $user->setCreatedAt();
-        $this->userRepository->create($user);
+        $this->userRepository->add($user);
 
         return $user;
     }
@@ -37,22 +37,7 @@ readonly class UserService
     public function update(int $id, UpdateUserModel $model): User
     {
         $user = $this->getUserOrFail($id);
-
-        if (null !== $model->username) {
-            $user->setUsername($model->username);
-        }
-        if (null !== $model->email) {
-            $user->setEmail($model->email);
-        }
-        if (null !== $model->role) {
-            $user->setRole($model->role);
-        }
-        if (null !== $model->password) {
-            $user->setPassword($model->password);
-        }
-
-        $user->setUpdatedAt();
-
+        $model->updateUser($user);
         $this->userRepository->update($user);
 
         return $user;
