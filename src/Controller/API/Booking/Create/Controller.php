@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\API\Location\Update;
+namespace App\Controller\API\Booking\Create;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
@@ -13,9 +13,9 @@ class Controller extends AbstractController
     ) {
     }
 
-    #[Route('/api/location/{id}', name: 'api_location_update', methods: ['PUT'])]
-    public function __invoke(int $id, #[MapRequestPayload] InputLocationDTO $dto): OutputLocationDTO
+    #[Route('/api/booking', name: 'api_booking_create', methods: ['POST'])]
+    public function __invoke(#[MapRequestPayload] InputBookingDTO $dto): OutputBookingDTO
     {
-        return $this->manager->update($id, $dto);
+        return $this->manager->create($dto);
     }
 }

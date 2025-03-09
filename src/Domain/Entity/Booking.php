@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Table(name: 'bookings')]
 #[ORM\Index(name: 'booking__trip_id__idx', columns: ['trip_id'])]
 #[ORM\Index(name: 'booking__passenger_id__idx', columns: ['passenger_id'])]
-class Booking
+class Booking implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::BIGINT, unique: true)]
@@ -98,7 +98,7 @@ class Booking
     public function setCreatedAt(): void
     {
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = clone $this->createdAt;
     }
 
     public function getUpdatedAt(): \DateTime

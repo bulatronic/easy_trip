@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\API\Trip\Delete;
+namespace App\Controller\API\Booking\Delete;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,11 +13,11 @@ class Controller extends AbstractController
     ) {
     }
 
-    #[Route('/api/trip/{id}', name: 'api_trip_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
+    #[Route('/api/booking/{id}', name: 'api_booking_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function __invoke(int $id): JsonResponse
     {
-        $this->manager->deleteTrip($id);
+        $this->manager->deleteBooking($id);
 
-        return $this->json(['message' => 'Trip deleted successfully']);
+        return $this->json(['message' => 'User deleted successfully']);
     }
 }

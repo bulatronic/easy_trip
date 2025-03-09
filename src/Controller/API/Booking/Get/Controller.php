@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\API\Trip\Get;
+namespace App\Controller\API\Booking\Get;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Routing\Attribute\Route;
@@ -12,8 +12,8 @@ class Controller extends AbstractController
     ) {
     }
 
-    #[Route('/api/trip/{id}', name: 'api_trip_get', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function __invoke(int $id): OutputTripDTO
+    #[Route('/api/booking/{id}', name: 'api_booking_get', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function __invoke(int $id): OutputBookingDTO
     {
         return $this->manager->get($id);
     }
