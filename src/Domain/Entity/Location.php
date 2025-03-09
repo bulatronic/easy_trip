@@ -2,19 +2,19 @@
 
 namespace App\Domain\Entity;
 
-use App\Infrastructure\Repository\LocationRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
 #[ORM\Table(name: 'locations')]
-class Location
+#[ORM\Index(name: 'location__name__idx', columns: ['name'])]
+#[ORM\Index(name: 'location__type__idx', columns: ['type'])]
+#[ORM\Index(name: 'location__coordinates__idx', columns: ['latitude', 'longitude'])]
+class Location implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::BIGINT, unique: true)]
-    #[ORM\CustomIdGenerator(class: 'doctrine.id_generator_identity')]
-    #[ORM\Index(name: 'location__name__idx', columns: ['name'])]
-    #[ORM\Index(name: 'location__type__idx', columns: ['type'])]
-    #[ORM\Index(name: 'location__coordinates__idx', columns: ['latitude', 'longitude'])]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private ?int $id = null;
 
     #[ORM\Column(name: 'name', type: 'string', length: 255)]

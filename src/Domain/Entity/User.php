@@ -7,13 +7,14 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
 #[ORM\Table(name: 'users')]
 #[ORM\UniqueConstraint(name: 'user__email__uniq', columns: ['email'])]
-class User
+class User implements EntityInterface
 {
     #[ORM\Id]
     #[ORM\Column(name: 'id', type: Types::BIGINT, unique: true)]
-    #[ORM\CustomIdGenerator(class: 'doctrine.id_generator_identity')]
+    #[ORM\GeneratedValue(strategy: 'IDENTITY')]
     private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
@@ -109,7 +110,7 @@ class User
     public function setCreatedAt(): void
     {
         $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = clone $this->createdAt;
     }
 
     public function getUpdatedAt(): \DateTime

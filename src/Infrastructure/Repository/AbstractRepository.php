@@ -12,28 +12,34 @@ use Doctrine\ORM\Exception\ORMException;
 abstract class AbstractRepository
 {
     public function __construct(
-        protected EntityManagerInterface $entityManager,
+        protected EntityManagerInterface $em,
     ) {
     }
 
     protected function flush(): void
     {
-        $this->entityManager->flush();
+        $this->em->flush();
     }
 
-    protected function store(EntityInterface $entity): int
+    protected function save(EntityInterface $entity): int
     {
-        $this->entityManager->persist($entity);
+        $this->em->persist($entity);
         $this->flush();
 
         return $entity->getId();
     }
 
+    protected function delete(EntityInterface $entity): void
+    {
+        $this->em->remove($entity);
+        $this->flush();
+    }
+
     /**
      * @throws ORMException
      */
-    public function refresh(EntityInterface $entity): void
+    protected function refresh(EntityInterface $entity): void
     {
-        $this->entityManager->refresh($entity);
+        $this->em->refresh($entity);
     }
 }
