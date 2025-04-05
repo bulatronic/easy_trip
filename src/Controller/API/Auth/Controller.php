@@ -9,13 +9,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class Controller extends AbstractController
 {
-    #[Route('/api/login_check', name: 'api_login_check', methods: ['POST'])]
-    public function login(): void
-    {
-        // Контроллер будет перехвачен firewall'ом
-        throw new \LogicException('This method should not be reached!');
-    }
-
     #[Route('/api/me', name: 'api_me', methods: ['GET'])]
     public function me(): JsonResponse
     {
