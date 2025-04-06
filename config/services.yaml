@@ -20,3 +20,7 @@ services:
   App\Application\EventListener\KernelExceptionEventListener:
     tags:
       - { name: kernel.event_listener, event: kernel.exception, method: onKernelException }
+
+  App\Application\EventListener\RoleCheckEventListener:
+    tags:
+      - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }

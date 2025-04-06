@@ -2,6 +2,7 @@
 
 namespace App\Controller\API\User\Create;
 
+use App\Domain\ValueObject\UserRole;
 use Symfony\Component\Validator\Constraints as Assert;
 
 class InputUserDTO
@@ -24,7 +25,10 @@ class InputUserDTO
 
         #[Assert\NotBlank]
         #[Assert\NotNull]
-        #[Assert\Choice(['admin', 'driver', 'passenger'])]
+        #[Assert\Choice([
+            UserRole::ROLE_PASSENGER->value,
+            UserRole::ROLE_DRIVER->value,
+        ])]
         public string $role,
     ) {
     }

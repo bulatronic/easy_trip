@@ -2,6 +2,7 @@
 
 namespace App\Domain\Entity;
 
+use App\Domain\ValueObject\UserRole;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
@@ -143,9 +144,9 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
      */
     public function getRoles(): array
     {
-        // Гарантируем что у пользователя всегда есть роль ROLE_USER
         $roles = $this->roles;
-        $roles[] = 'ROLE_USER';
+        // Гарантируем что у пользователя всегда есть роль ROLE_USER
+        $roles[] = UserRole::ROLE_USER->value;
 
         return array_unique($roles);
     }

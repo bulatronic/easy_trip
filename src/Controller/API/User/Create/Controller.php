@@ -2,6 +2,8 @@
 
 namespace App\Controller\API\User\Create;
 
+use App\Controller\Security\RequireRole;
+use App\Domain\ValueObject\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,6 +15,7 @@ class Controller extends AbstractController
     ) {
     }
 
+    #[RequireRole(roles: [UserRole::ROLE_USER->value])]
     #[Route('/api/user', name: 'api_user_create', methods: ['POST'])]
     public function __invoke(#[MapRequestPayload] InputUserDTO $dto): OutputUserDTO
     {

@@ -2,6 +2,8 @@
 
 namespace App\Controller\API\Location\Delete;
 
+use App\Controller\Security\RequireRole;
+use App\Domain\ValueObject\UserRole;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
@@ -13,6 +15,7 @@ class Controller extends AbstractController
     ) {
     }
 
+    #[RequireRole(roles: [UserRole::ROLE_ADMIN->value])]
     #[Route('/api/location/{id}', name: 'api_location_delete', requirements: ['id' => '\d+'], methods: ['DELETE'])]
     public function __invoke(int $id): JsonResponse
     {
