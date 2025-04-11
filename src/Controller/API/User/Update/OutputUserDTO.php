@@ -20,11 +20,6 @@ class OutputUserDTO implements OutputDTOInterface
         #[Assert\NotNull]
         #[Assert\Email]
         public string $email,
-
-        #[Assert\NotBlank]
-        #[Assert\NotNull]
-        #[Assert\Choice(['admin', 'driver', 'passenger'])]
-        public string $role,
     ) {
     }
 }

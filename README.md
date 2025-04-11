@@ -10,7 +10,7 @@ id (Primary Key)
 username
 email
 password
-role (passenger, driver, admin)
+roles (ROLE_DRIVER, ROLE_PASSENGER, ROLE_ADMIN)
 created_at
 updated_at
 ```
