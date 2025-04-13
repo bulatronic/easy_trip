@@ -3,6 +3,7 @@
 namespace App\Application\EventListener;
 
 use App\Controller\Exception\HttpCompliantExceptionInterface;
+use App\Domain\Exception\ValidationException;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,6 +41,10 @@ class KernelExceptionEventListener
         // Если это ошибка валидации
         elseif ($exception instanceof ValidationFailedException) {
             $event->setResponse($this->getValidationFailedResponse($exception));
+        }
+        // Обработка исключения в сервисах
+        elseif ($exception instanceof ValidationException) {
+            $event->setResponse($this->getHttpResponse($exception->getMessage(), Response::HTTP_BAD_REQUEST));
         }
         // Общая обработка других ошибок
         else {

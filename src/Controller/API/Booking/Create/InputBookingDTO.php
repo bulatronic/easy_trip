@@ -15,11 +15,8 @@ class InputBookingDTO
         public int $passenger,
         #[Assert\NotBlank]
         #[Assert\NotNull]
+        #[Assert\Positive]
         public int $seats_booked,
-        #[Assert\NotBlank]
-        #[Assert\NotNull]
-        #[Assert\Choice(['booked', 'cancelled', 'completed'])]
-        public string $status,
     ) {
     }
 }

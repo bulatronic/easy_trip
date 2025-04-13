@@ -43,7 +43,7 @@ class CreateUserCommand extends Command
         );
         $user->setPassword($hashedPassword);
 
-        $user->setRoles(['ROLE_DRIVER']);
+        $user->setRole('ROLE_DRIVER');
         $user->setCreatedAt();
 
         $this->entityManager->persist($user);

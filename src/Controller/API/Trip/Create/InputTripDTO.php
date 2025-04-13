@@ -29,10 +29,6 @@ class InputTripDTO
         #[Assert\NotBlank]
         #[Assert\PositiveOrZero]
         public string $price_per_seat,
-
-        #[Assert\NotBlank]
-        #[Assert\Choice(['planned', 'in_progress', 'completed', 'cancelled'])]
-        public string $status,
     ) {
     }
 }

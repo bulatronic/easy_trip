@@ -29,8 +29,8 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
     #[ORM\Column(type: 'string', length: 255)]
     private string $password;
 
-    #[ORM\Column(type: 'json')]
-    private array $roles = [];
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $role;
 
     #[ORM\Column(name : 'created_at', type: 'datetime')]
     private \DateTime $createdAt;
@@ -139,48 +139,24 @@ class User implements EntityInterface, UserInterface, PasswordAuthenticatedUserI
         return $this;
     }
 
+    public function getRole(): string
+    {
+        return $this->role;
+    }
+
+    public function setRole(string $role): self
+    {
+        $this->role = $role;
+
+        return $this;
+    }
+
     /**
      * @see UserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // Гарантируем что у пользователя всегда есть роль ROLE_USER
-        $roles[] = UserRole::ROLE_USER->value;
-
-        return array_unique($roles);
-    }
-
-    public function setRoles(array $roles): self
-    {
-        $this->roles = $roles;
-
-        return $this;
-    }
-
-    public function addRole(string $role): self
-    {
-        if (!in_array($role, $this->roles, true)) {
-            $this->roles[] = $role;
-        }
-
-        return $this;
-    }
-
-    public function removeRole(string $role): self
-    {
-        $key = array_search($role, $this->roles, true);
-        if (false !== $key) {
-            unset($this->roles[$key]);
-            $this->roles = array_values($this->roles);
-        }
-
-        return $this;
-    }
-
-    public function hasRole(string $role): bool
-    {
-        return in_array($role, $this->getRoles(), true);
+        return [$this->role, UserRole::ROLE_USER->value];
     }
 
     public function eraseCredentials(): void

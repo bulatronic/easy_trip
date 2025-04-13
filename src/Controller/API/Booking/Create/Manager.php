@@ -22,7 +22,6 @@ readonly class Manager
             $dto->trip,
             $dto->passenger,
             $dto->seats_booked,
-            $dto->status,
         );
 
         $booking = $this->service->create($createBookingModel);

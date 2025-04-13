@@ -2,6 +2,8 @@
 
 namespace App\Domain\Model\Trip;
 
+use App\Domain\Exception\ValidationException;
+
 class CreateTripModel
 {
     use TripModelTrait;
@@ -13,7 +15,15 @@ class CreateTripModel
         public \DateTime $departure_time,
         public int $available_seats,
         public string $price_per_seat,
-        public string $status,
+        public string $status = 'planned',
     ) {
+        $this->validate();
+    }
+
+    private function validate(): void
+    {
+        if ($this->departure_time < new \DateTime()) {
+            throw new ValidationException('Нельзя создать поездку в прошлом времени');
+        }
     }
 }

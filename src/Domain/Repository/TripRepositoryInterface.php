@@ -20,7 +20,5 @@ interface TripRepositoryInterface
 
     public function findByStartAndEndLocation(int $startLocationId, int $endLocationId): array;
 
-    public function findByDateRange(\DateTime $startDate, \DateTime $endDate): array;
-
     public function findAvailableTrips(int $startLocationId, int $endLocationId, \DateTime $departureTime): array;
 }

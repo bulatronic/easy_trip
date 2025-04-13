@@ -58,15 +58,6 @@ class TripRepository extends AbstractRepository implements TripRepositoryInterfa
         ]);
     }
 
-    // поиск поездок по дате
-    public function findByDateRange(\DateTime $startDate, \DateTime $endDate): array
-    {
-        return $this->em->getRepository(Trip::class)->findBy([
-            'departure_time' => $startDate,
-            'departure_time' => $endDate,
-        ]);
-    }
-
     // поиск доступных поездок по начальной и конечной точке, дате и времени
     public function findAvailableTrips(int $startLocationId, int $endLocationId, \DateTime $departureTime): array
     {

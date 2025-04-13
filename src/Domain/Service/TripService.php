@@ -55,8 +55,8 @@ readonly class TripService
 
     public function remove(int $id): void
     {
-        $user = $this->getTripOrFail($id);
-        $this->tripRepository->remove($user);
+        $trip = $this->getTripOrFail($id);
+        $this->tripRepository->remove($trip);
     }
 
     public function findTripById(int $id): ?Trip
@@ -64,12 +64,32 @@ readonly class TripService
         return $this->getTripOrFail($id);
     }
 
+    public function completeTrip(int $id): void
+    {
+        $trip = $this->getTripOrFail($id);
+        $trip->setStatus('completed');
+        $this->tripRepository->update($trip);
+    }
+
+    public function cancelTrip(Trip $trip): void
+    {
+        $trip->setStatus('cancelled');
+        $this->tripRepository->update($trip);
+    }
+
+    public function updateAvailableSeats(int $tripId, int $seats): void
+    {
+        $trip = $this->getTripOrFail($tripId);
+        $trip->setAvailableSeats($seats);
+        $this->tripRepository->update($trip);
+    }
+
     private function getTripOrFail(int $id): Trip
     {
         $trip = $this->tripRepository->findById($id);
 
         if (null === $trip) {
-            throw new NotFoundHttpException(sprintf('Trip with id %d not found.', $id));
+            throw new NotFoundHttpException(sprintf('Поездка с id %d не найдена.', $id));
         }
 
         return $trip;

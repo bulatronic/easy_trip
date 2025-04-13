@@ -16,7 +16,7 @@ class CreateReviewModel
         public int $user,
         public int $trip,
         public int $rating,
-        public string $comment,
+        public ?string $comment,
     ) {
     }
 

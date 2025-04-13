@@ -45,4 +45,13 @@ class ReviewRepository extends AbstractRepository implements ReviewRepositoryInt
             'user_id' => $userId,
         ]);
     }
+
+    // поиск отзыва по поездке и пользователю
+    public function findByTripIdAndUserId(int $tripId, int $userId): ?Review
+    {
+        return $this->em->getRepository(Review::class)->findOneBy([
+            'trip' => $tripId,
+            'user' => $userId,
+        ]);
+    }
 }

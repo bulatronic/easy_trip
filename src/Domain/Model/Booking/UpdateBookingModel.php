@@ -3,6 +3,7 @@
 namespace App\Domain\Model\Booking;
 
 use App\Domain\Entity\Booking;
+use App\Domain\Exception\ValidationException;
 
 class UpdateBookingModel
 {
@@ -15,6 +16,25 @@ class UpdateBookingModel
         public ?int $seats_booked,
         public ?string $status,
     ) {
+    }
+
+    public function validate(Booking $originalBooking): void
+    {
+        if (null !== $this->seats_booked) {
+            if ($this->seats_booked <= 0) {
+                throw new ValidationException('Количество мест должно быть положительным');
+            }
+
+            // Проверяем доступность мест только если меняем их количество
+            if ($this->seats_booked != $originalBooking->getSeatsBooked()) {
+                $trip = $this->trip ? $this->getTrip() : $originalBooking->getTrip();
+                $availableSeats = $trip->getAvailableSeats() + $originalBooking->getSeatsBooked();
+
+                if ($this->seats_booked > $availableSeats) {
+                    throw new ValidationException('Недостаточно свободных мест');
+                }
+            }
+        }
     }
 
     public function updateBooking(Booking $booking): void

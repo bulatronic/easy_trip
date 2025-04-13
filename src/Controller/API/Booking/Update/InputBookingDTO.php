@@ -15,6 +15,7 @@ class InputBookingDTO
         public ?int $passenger,
         #[Assert\NotBlank]
         #[Assert\NotNull]
+        #[Assert\Positive]
         public ?int $seats_booked,
         #[Assert\NotBlank]
         #[Assert\NotNull]

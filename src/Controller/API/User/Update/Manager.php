@@ -32,7 +32,6 @@ readonly class Manager
             id: $user->getId(),
             username: $user->getUsername(),
             email: $user->getEmail(),
-            role: $user->getRole(),
         );
     }
 }

@@ -25,7 +25,6 @@ readonly class Manager
             $dto->departure_time,
             $dto->available_seats,
             $dto->price_per_seat,
-            $dto->status,
         );
 
         $trip = $this->service->create($createTripModel);
