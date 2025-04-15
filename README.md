@@ -81,3 +81,78 @@ updated_at
    docker-compose up -d
    ```
 
+## Засеивание фикстур (из контейнера)
+   ```sh
+   php bin/console doctrine:fixtures:load --purge-with-truncate
+   ```
+
+## Команда генерации статистики
+
+Команда генерирует статистику поездок за указанный период.
+
+## Параметры команды
+
+| Параметр      | Обязательность | Значения                          | Описание                                                                 |
+|---------------|----------------|-----------------------------------|--------------------------------------------------------------------------|
+| `--type`      | Обязательный   | `personal`, `global`              | Тип статистики: персональная или общая                                   |
+| `--period`    | Обязательный   | `daily`, `weekly`, `monthly`, `yearly` | Период агрегации статистики                                         |
+| `--driver-id` | Опциональный   | Числовой ID                      | ID водителя (только для `personal` статистики)                          |
+| `--start-date`| Опциональный   | Дата в формате `YYYY-MM-DD`      | Начальная дата периода (по умолчанию - начало текущего периода)         |
+| `--end-date`  | Опциональный   | Дата в формате `YYYY-MM-DD`      | Конечная дата периода (по умолчанию - конец текущего периода)           |
+
+## Генератор статистики - Примеры использования
+
+### Глобальная статистика
+
+```bash
+
+# Дневная статистика
+php bin/console app:generate-statistics --type=global --period=daily
+
+# Месячная статистика
+php bin/console app:generate-statistics --type=global  --period=monthly
+
+# Годовая статистика
+php bin/console app:generate-statistics --type=global  --period=yearly
+```
+
+### Персональная статистика водителя
+
+```bash
+
+# Дневная статистика
+php bin/console app:generate-statistics --type=personal --period=daily --driver-id=1
+
+# Месячная статистика
+php bin/console app:generate-statistics --type=personal --period=monthly --driver-id=1
+
+# Годовая статистика
+php bin/console app:generate-statistics --type=personal --period=yearly --driver-id=1
+```
+
+### Персональная статистика за период
+
+```bash
+php bin/console app:generate-statistics --type=personal --driver-id=1 --start-date=2025-04-01 --end-date=2025-04-14
+```
+
+[//]: # (### Тестирование ошибок)
+
+[//]: # ()
+[//]: # (```bash)
+
+[//]: # (# Не указан ID водителя для персональной статистики)
+
+[//]: # (php bin/console app:generate-statistics --type=personal)
+
+[//]: # ()
+[//]: # (# Неверный период)
+
+[//]: # (php bin/console app:generate-statistics --period=invalid)
+
+[//]: # ()
+[//]: # (# Неверный формат даты)
+
+[//]: # (php bin/console app:generate-statistics --start-date=01-04-2025)
+
+[//]: # (```)

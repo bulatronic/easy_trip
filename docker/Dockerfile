@@ -6,39 +6,60 @@ ARG PUID=1000
 ARG PGID=1000
 
 # Установка зависимостей
-RUN apk update && apk upgrade --available && apk add --no-cache \
-    bash \
-    curl \
-    git \
-    icu-dev \
-    libevent-dev \
-    libpng-dev \
-    libjpeg-turbo-dev \
-    libwebp-dev \
-    freetype-dev \
-    libzip-dev \
-    postgresql-dev \
-    zlib-dev \
-    autoconf \
-    build-base \
-    linux-headers \
-    shadow
+RUN apk update && apk upgrade --available && apk add --virtual build-deps \
+        autoconf \
+        build-base \
+        icu-dev \
+        libevent-dev \
+        openssl-dev \
+        zlib-dev \
+        libzip \
+        libzip-dev \
+        zlib \
+        zlib-dev \
+        bzip2 \
+        git \
+        libpng \
+        libpng-dev \
+        libjpeg \
+        libjpeg-turbo-dev \
+        libwebp-dev \
+        freetype \
+        freetype-dev \
+        postgresql-dev \
+        linux-headers \
+        libmemcached-dev \
+        rabbitmq-c \
+        rabbitmq-c-dev \
+        curl \
+        wget \
+        bash
 
 # Установка PHP расширений
-RUN docker-php-ext-configure gd --with-freetype --with-jpeg && \
-    docker-php-ext-install -j$(nproc) \
-        intl \
-        gd \
-        bcmath \
-        pdo_pgsql \
-        sockets \
-        zip
-
-# Установка Redis расширения через PECL
-RUN pecl install redis && docker-php-ext-enable redis
+RUN docker-php-ext-configure gd --with-freetype=/usr/include/ --with-jpeg=/usr/include/
+RUN docker-php-ext-install -j$(getconf _NPROCESSORS_ONLN) \
+    intl \
+    gd \
+    bcmath \
+    pcntl \
+    pdo_pgsql \
+    sockets \
+    zip
+RUN pecl channel-update pecl.php.net \
+    && pecl install -o -f \
+        amqp \
+        memcached \
+        redis \
+        event \
+    && rm -rf /tmp/pear \
+    && echo "extension=amqp.so" > /usr/local/etc/php/conf.d/amqp.ini \
+    && echo "extension=redis.so" > /usr/local/etc/php/conf.d/redis.ini \
+    && echo "extension=event.so" > /usr/local/etc/php/conf.d/event.ini \
+    && echo "extension=memcached.so" > /usr/local/etc/php/conf.d/memcached.ini
 
 # Настройка пользователя для согласования прав
-RUN groupmod -o -g ${PGID} www-data && \
+RUN apk add --no-cache shadow && \
+    groupmod -o -g ${PGID} www-data && \
     usermod -o -u ${PUID} -g www-data www-data
 
 # Установка Composer

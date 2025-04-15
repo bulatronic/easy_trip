@@ -38,16 +38,17 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
-# Временно добавил для просмотра БД
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin
-    restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3-management
+    working_dir: /app
+    hostname: rabbit-mq
+    container_name: 'rabbit-mq'
     ports:
-      - "5050:80"
+      - 15672:15672
+      - 5672:5672
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: root
 
 volumes:
   db_data:
