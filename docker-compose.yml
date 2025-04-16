@@ -4,8 +4,9 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
       args:
-        PUID: 1000
-        PGID: 1000
+        APP_ENV: ${APP_ENV:-dev}
+        HOST_UID: ${HOST_UID:-1000}
+        HOST_GID: ${HOST_GID:-1000}
     container_name: easy_trip_fpm
     restart: unless-stopped
     volumes:
