@@ -81,7 +81,7 @@ updated_at
    docker-compose up -d
    ```
 
-## Засеивание фикстур (из контейнера)
+## Засеивание фикстур
    ```sh
    php bin/console doctrine:fixtures:load --purge-with-truncate
    ```
@@ -136,6 +136,29 @@ php bin/console app:generate-statistics --type=personal --period=yearly --driver
 php bin/console app:generate-statistics --type=personal --driver-id=1 --start-date=2025-04-01 --end-date=2025-04-14
 ```
 
+### Проверка работы Supervisor
+Чтобы проверить, запущен ли Supervisor и работают ли процессы, управляемые им, выполните команду:
+```bash
+ps aux | grep supervisord
+```
+
+### Просмотр логов Supervisor
+Чтобы проверить логи и увидеть, есть ли ошибки или проблемы с процессами, запущенными через Supervisor, выполните:
+```bash
+tail -n 50 /var/log/supervisor/supervisord.log
+```
+
+### Проверка списка запланированных задач Cron
+Чтобы убедиться, что задача cron добавлена правильно и активна, выполните команду:
+```bash
+crontab -l
+```
+
+### Проверка состояния миграций Doctrine
+Чтобы проверить, какие миграции Doctrine были выполнены, и есть ли ещё не выполненные миграции, выполните команду:
+```bash
+php bin/console doctrine:migrations:status
+```
 [//]: # (### Тестирование ошибок)
 
 [//]: # ()
