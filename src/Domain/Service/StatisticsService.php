@@ -10,6 +10,7 @@ use App\Domain\Repository\ReviewRepositoryInterface;
 use App\Domain\Repository\StatisticsRepositoryInterface;
 use App\Domain\Repository\TripRepositoryInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 readonly class StatisticsService
 {
@@ -132,21 +133,39 @@ readonly class StatisticsService
         return $this->updateStatisticsBus->sendUpdateStatisticsMessage($updateStatisticsDTO);
     }
 
-    public function getDriverStatistics(User $driver, string $periodType): ?Statistics
+    public function getDriverStatistics(User $driver, string $periodType): Statistics
     {
-        $startDate = new \DateTime('-1 month');
-        $endDate = new \DateTime();
+        [$startDate, $endDate] = $this->getDefaultDates($periodType);
 
-        return $this->statisticsRepository->findByPeriod(
+        $statistic = $this->statisticsRepository->findDriverStatisticsByPeriod(
+            $driver,
             $startDate,
             $endDate,
             $periodType
         );
+
+        if (!$statistic) {
+            throw new NotFoundHttpException(sprintf('Statistics with id %d not found.', $driver->getId()));
+        }
+
+        return $statistic;
     }
 
     public function getGlobalStatistics(string $periodType): ?Statistics
     {
-        return $this->statisticsRepository->findLatestByPeriodType($periodType);
+        [$startDate, $endDate] = $this->getDefaultDates($periodType);
+
+        $statistic = $this->statisticsRepository->findStatisticByPeriodType(
+            $startDate,
+            $endDate,
+            $periodType
+        );
+
+        if (!$statistic) {
+            throw new NotFoundHttpException('Entry not found.');
+        }
+
+        return $statistic;
     }
 
     private function normalizeEndDate(\DateTime $endDate): \DateTime
@@ -183,5 +202,29 @@ readonly class StatisticsService
         $statisticsEntity->setAverageRating($statistics['averageRating']);
 
         return $statisticsEntity;
+    }
+
+    private function getDefaultDates(string $period): array
+    {
+        $now = new \DateTimeImmutable();
+
+        return match ($period) {
+            'daily' => [
+                $now->setTime(0, 0),
+                $now->setTime(23, 59, 59),
+            ],
+            'weekly' => [
+                $now->modify('monday this week')->setTime(0, 0),
+                $now->modify('sunday this week')->setTime(23, 59, 59),
+            ],
+            'monthly' => [
+                $now->modify('first day of this month')->setTime(0, 0),
+                $now->modify('last day of this month')->setTime(23, 59, 59),
+            ],
+            'yearly' => [
+                $now->modify('first day of january')->setTime(0, 0),
+                $now->modify('last day of december')->setTime(23, 59, 59),
+            ],
+        };
     }
 }
