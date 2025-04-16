@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\Consumer\UpdateStatistics\Input;
+namespace App\Controller\CLI\Input;
 
 use Symfony\Component\Validator\Constraints as Assert;
 

@@ -2,10 +2,7 @@
 
 namespace App\Controller\CLI;
 
-use App\Application\Consumer\UpdateStatistics\Input\UpdateStatisticsDTO;
-use App\Domain\Service\StatisticsService;
-use App\Domain\Service\UserService;
-use OldSound\RabbitMqBundle\RabbitMq\ProducerInterface;
+use App\Controller\CLI\Input\UpdateStatisticsDTO;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,9 +13,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class UpdateStatisticsCommand extends Command
 {
     public function __construct(
-        private readonly ProducerInterface $updateStatisticsProducer,
-        // private readonly StatisticsService $statisticsService,
-        // private readonly UserService $userService
+        private readonly Manager $manager,
     ) {
         parent::__construct();
     }
@@ -68,16 +63,7 @@ class UpdateStatisticsCommand extends Command
                 'personal' === $statisticsType ? (int) $driverId : null,
             );
 
-            $this->updateStatisticsProducer->publish(
-                json_encode([
-                    'periodType' => $dto->periodType,
-                    'statisticsType' => $dto->statisticsType,
-                    'driverId' => $dto->driverId,
-                    'startDate' => $dto->startDate->format('Y-m-d H:i:s'),
-                    'endDate' => $dto->endDate->format('Y-m-d H:i:s'),
-                ]),
-                'update_statistics'
-            );
+            $this->manager->updateStatistics($dto);
 
             $output->writeln(sprintf(
                 '<info>Statistics update sent. Type: %s, Period: %s, Dates: %s to %s</info>',

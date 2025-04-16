@@ -2,6 +2,8 @@
 
 namespace App\Domain\Service;
 
+use App\Domain\Bus\UpdateStatisticsInterface;
+use App\Domain\DTO\UpdateStatisticsDTO;
 use App\Domain\Entity\Statistics;
 use App\Domain\Entity\User;
 use App\Domain\Repository\ReviewRepositoryInterface;
@@ -16,6 +18,7 @@ readonly class StatisticsService
         private TripRepositoryInterface $tripRepository,
         private ReviewRepositoryInterface $reviewRepository,
         private LoggerInterface $logger,
+        private UpdateStatisticsInterface $updateStatisticsBus,
     ) {
     }
 
@@ -91,7 +94,7 @@ readonly class StatisticsService
             }
         }
 
-        // Теперь обрабатываем каждую поездку
+        // Обрабатываем каждую поездку
         foreach ($trips as $trip) {
             $tripId = $trip->getId();
             $totalRevenue += $trip->getPricePerSeat() * $trip->getAvailableSeats();
@@ -122,6 +125,11 @@ readonly class StatisticsService
             'averagePassengers' => $averagePassengers,
             'averageRating' => $averageRating,
         ];
+    }
+
+    public function updateStatistics(UpdateStatisticsDTO $updateStatisticsDTO): bool
+    {
+        return $this->updateStatisticsBus->sendUpdateStatisticsMessage($updateStatisticsDTO);
     }
 
     public function getDriverStatistics(User $driver, string $periodType): ?Statistics
