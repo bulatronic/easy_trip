@@ -3,6 +3,7 @@
 namespace App\Infrastructure\Repository;
 
 use App\Domain\Entity\Trip;
+use App\Domain\Entity\User;
 use App\Domain\Repository\TripRepositoryInterface;
 
 /**
@@ -71,5 +72,27 @@ class TripRepository extends AbstractRepository implements TripRepositoryInterfa
     public function findById(int $id): ?Trip
     {
         return $this->em->getRepository(Trip::class)->find($id);
+    }
+
+    public function findByDriverAndDateRange(User $driver, \DateTime $startDate, \DateTime $endDate): array
+    {
+        return $this->em->getRepository(Trip::class)->createQueryBuilder('t')
+            ->where('t.driver = :driver')
+            ->andWhere('t.departureTime BETWEEN :startDate AND :endDate')
+            ->setParameter('driver', $driver)
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findByDateRange(\DateTime $startDate, \DateTime $endDate): array
+    {
+        return $this->em->getRepository(Trip::class)->createQueryBuilder('t')
+            ->where('t.departureTime BETWEEN :startDate AND :endDate')
+            ->setParameter('startDate', $startDate)
+            ->setParameter('endDate', $endDate)
+            ->getQuery()
+            ->getResult();
     }
 }

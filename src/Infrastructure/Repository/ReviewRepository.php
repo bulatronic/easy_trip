@@ -38,6 +38,20 @@ class ReviewRepository extends AbstractRepository implements ReviewRepositoryInt
         ]);
     }
 
+    public function findByTripIds(array $tripIds): array
+    {
+        if (empty($tripIds)) {
+            return [];
+        }
+
+        return $this->em->getRepository(Review::class)
+            ->createQueryBuilder('r')
+            ->where('r.trip IN (:tripIds)')
+            ->setParameter('tripIds', $tripIds)
+            ->getQuery()
+            ->getResult();
+    }
+
     // поиск отзывов по пользователю
     public function findByUserId(int $userId): array
     {

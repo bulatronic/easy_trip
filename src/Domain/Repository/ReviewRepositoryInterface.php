@@ -16,6 +16,8 @@ interface ReviewRepositoryInterface
 
     public function findByTripId(int $tripId): array;
 
+    public function findByTripIds(array $tripIds): array;
+
     public function findByUserId(int $userId): array;
 
     public function findByTripIdAndUserId(int $tripId, int $userId): ?Review;

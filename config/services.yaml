@@ -24,3 +24,7 @@ services:
   App\Application\EventListener\RoleCheckEventListener:
     tags:
       - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
+
+  App\Infrastructure\Bus\RabbitMqBus:
+    calls:
+      - [ 'registerProducer', [ !php/enum App\Infrastructure\Bus\AmqpExchangeEnum::UpdateStatistics, '@old_sound_rabbit_mq.update_statistics_producer' ] ]

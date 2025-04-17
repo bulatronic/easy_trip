@@ -4,8 +4,9 @@ services:
       context: .
       dockerfile: ./docker/Dockerfile
       args:
-        PUID: 1000
-        PGID: 1000
+        APP_ENV: ${APP_ENV:-dev}
+        HOST_UID: ${HOST_UID:-1000}
+        HOST_GID: ${HOST_GID:-1000}
     container_name: easy_trip_fpm
     restart: unless-stopped
     volumes:
@@ -38,16 +39,17 @@ services:
     volumes:
       - db_data:/var/lib/postgresql/data
 
-# Временно добавил для просмотра БД
-  pgadmin:
-    image: dpage/pgadmin4:latest
-    container_name: pgadmin
-    restart: unless-stopped
+  rabbitmq:
+    image: rabbitmq:3-management
+    working_dir: /app
+    hostname: rabbit-mq
+    container_name: 'rabbit-mq'
     ports:
-      - "5050:80"
+      - 15672:15672
+      - 5672:5672
     environment:
-      PGADMIN_DEFAULT_EMAIL: admin@admin.com
-      PGADMIN_DEFAULT_PASSWORD: admin
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: root
 
 volumes:
   db_data:

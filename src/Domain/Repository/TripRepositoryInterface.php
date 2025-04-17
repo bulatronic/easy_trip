@@ -3,6 +3,7 @@
 namespace App\Domain\Repository;
 
 use App\Domain\Entity\Trip;
+use App\Domain\Entity\User;
 
 interface TripRepositoryInterface
 {
@@ -21,4 +22,10 @@ interface TripRepositoryInterface
     public function findByStartAndEndLocation(int $startLocationId, int $endLocationId): array;
 
     public function findAvailableTrips(int $startLocationId, int $endLocationId, \DateTime $departureTime): array;
+
+    public function findById(int $id): ?Trip;
+
+    public function findByDriverAndDateRange(User $driver, \DateTime $startDate, \DateTime $endDate): array;
+
+    public function findByDateRange(\DateTime $startDate, \DateTime $endDate): array;
 }
