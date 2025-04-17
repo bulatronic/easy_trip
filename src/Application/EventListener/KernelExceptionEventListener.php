@@ -48,8 +48,17 @@ class KernelExceptionEventListener
         }
         // Общая обработка других ошибок
         else {
-            $event->setResponse($this->getHttpResponse('Something went wrong!', Response::HTTP_INTERNAL_SERVER_ERROR));
+            $message = $this->shouldShowDetails()
+                ? $exception->getMessage()
+                : 'Something went wrong!';
+
+            $event->setResponse($this->getHttpResponse($message, Response::HTTP_INTERNAL_SERVER_ERROR));
         }
+    }
+
+    private function shouldShowDetails(): bool
+    {
+        return $_ENV['APP_ENV'] === 'dev';
     }
 
     private function getHttpResponse($message, $code): Response

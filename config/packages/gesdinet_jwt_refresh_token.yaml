@@ -1,14 +1,14 @@
-#gesdinet_jwt_refresh_token:
-#  refresh_token_class: App\Domain\Entity\RefreshToken
-#  # Время жизни refresh токена (30 дней в секундах)
-#  ttl: 2592000
-#  # Обновление TTL при обновлении токена
-#  ttl_update: true
-#  token_parameter_name: refresh_token
-#  # Одноразовое использование refresh токена
-#  single_use: true
-#  cookie:
-#    # Установить true, если надо использовать cookie
-#    enabled: false
-#  # Указывает, какой firewall использовать для обновления токенов
-#  firewall: refresh
+gesdinet_jwt_refresh_token:
+  refresh_token_class: App\Domain\Entity\RefreshToken
+  # Время жизни refresh токена (30 дней в секундах)
+  ttl: 2592000
+  # Обновление TTL при обновлении токена
+  ttl_update: true
+  token_parameter_name: refresh_token
+  # Одноразовое использование refresh токена
+  single_use: true
+  cookie:
+    # Установить true, если надо использовать cookie
+    enabled: false
+  # Указывает, какой firewall использовать для обновления токенов
+  firewall: refresh
