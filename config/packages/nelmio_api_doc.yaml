@@ -4,6 +4,77 @@ nelmio_api_doc:
       title: Easy Trip
       description: Сервис для поиска попутчиков
       version: 1.0.0
+    paths:
+      /api/login_check:
+        post:
+          tags: [ Auth ]
+          summary: Get JWT and refresh tokens
+          description: Authenticate user and receive access+refresh tokens
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    email:
+                      type: string
+                      example: user
+                    password:
+                      type: string
+                      example: password
+                  required: [ email, password ]
+          responses:
+            200:
+              description: Successfully authenticated
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        description: JWT access token
+                        example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+                      refresh_token:
+                        type: string
+                        description: Token for refreshing JWT
+                        example: "9a0557756feead4eb2cbdd51cbd828f64c2b82518b209d10004..."
+            401:
+              description: Invalid credentials
+
+      /api/token/refresh:
+        post:
+          tags: [ Auth ]
+          summary: Refresh JWT token
+          description: Get new access token using refresh token
+          requestBody:
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    refresh_token:
+                      type: string
+                      example: "9a0557756feead4eb2cbdd51cbd828f64c2b82518b209d10004..."
+                  required: [ refresh_token ]
+          responses:
+            200:
+              description: New tokens issued
+              content:
+                application/json:
+                  schema:
+                    type: object
+                    properties:
+                      token:
+                        type: string
+                        description: New JWT access token
+                        example: "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9..."
+                      refresh_token:
+                        type: string
+                        description: New refresh token
+                        example: "36004343bc1e4efb2e36aa2bafe4fe0c6e02961465b..."
+            400:
+              description: Invalid refresh token
 
   areas:
     path_patterns:
