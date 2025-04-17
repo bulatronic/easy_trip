@@ -53,20 +53,20 @@ jobs:
               cp .env.backup .env
             fi
           
-            # Создаем или обновляем .env.local с явным указанием prod окружения
-            echo 'APP_ENV=prod' > .env.local
+            # Создаем или обновляем .env.local с явным указанием dev окружения
+            echo 'APP_ENV=dev' > .env.local
           
             # Создаем директории для логов и кеша, если их нет
             mkdir -p var/log var/cache var/supervisor
             chmod -R 777 var
           
             # Устанавливаем переменную окружения для docker compose
-            export APP_ENV=prod
+            export APP_ENV=dev
           
             # Останавливаем и перезапускаем контейнеры с переменной окружения
             echo 'Restarting Docker containers in production mode...'
             docker compose down
-            APP_ENV=prod docker compose up -d --build --remove-orphans
+            APP_ENV=dev docker compose up -d --build --remove-orphans
           
             # Ждем, пока PostgreSQL полностью запустится
             echo 'Waiting for PostgreSQL to be ready...'
