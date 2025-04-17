@@ -1,0 +1,88 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:  # Для ручного запуска
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.7.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Deploy to VPS
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+        run: |
+          # Добавляем хост в known_hosts
+          ssh-keyscan -p $SSH_PORT -H $SSH_HOST >> ~/.ssh/known_hosts
+          
+          # Выполняем команды на сервере
+          ssh -p $SSH_PORT $SSH_USERNAME@$SSH_HOST "
+            echo 'Starting deployment process...'
+          
+            # Переходим в директорию проекта или создаем ее
+            mkdir -p ~/easy_trip
+            cd ~/easy_trip
+          
+            # Сохраняем окружение, если файл уже существует
+            if [ -f .env ]; then
+              cp .env .env.backup
+            fi
+          
+            # Клонируем репозиторий, если его нет, или обновляем его
+            if [ -d .git ]; then
+              echo 'Pulling latest changes...'
+              git pull origin main
+            else
+              echo 'Cloning repository...'
+              git clone https://github.com/Mr-Brainwash/easy_trip .
+            fi
+          
+            # Восстанавливаем .env, если был сохранен
+            if [ -f .env.backup ]; then
+              cp .env.backup .env
+            fi
+          
+            # Создаем или обновляем .env.local с явным указанием prod окружения
+            echo 'APP_ENV=prod' > .env.local
+          
+            # Создаем директории для логов и кеша, если их нет
+            mkdir -p var/log var/cache var/supervisor
+            chmod -R 777 var
+          
+            # Устанавливаем переменную окружения для docker compose
+            export APP_ENV=prod
+          
+            # Останавливаем и перезапускаем контейнеры с переменной окружения
+            echo 'Restarting Docker containers in production mode...'
+            docker compose down
+            APP_ENV=prod docker compose up -d --build --remove-orphans
+          
+            # Ждем, пока PostgreSQL полностью запустится
+            echo 'Waiting for PostgreSQL to be ready...'
+            sleep 15
+          
+            # Выполняем миграции и другие команды Symfony
+            echo 'Running Symfony commands...'
+            docker compose exec -T php composer install --no-interaction --no-dev --optimize-autoloader
+            docker compose exec -T php bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration
+            docker compose exec -T php bin/console doctrine:fixtures:load --no-interaction --purge-with-truncate
+            docker compose exec -T php bin/console cache:clear --no-warmup
+            docker compose exec -T php bin/console cache:warmup
+          
+            # Проверяем статус контейнеров
+            echo 'Container status:'
+            docker ps
+          
+            echo 'Deployment completed successfully!'
+          "
