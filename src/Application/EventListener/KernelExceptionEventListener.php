@@ -58,7 +58,7 @@ class KernelExceptionEventListener
 
     private function shouldShowDetails(): bool
     {
-        return $_ENV['APP_ENV'] === 'dev';
+        return 'dev' === $_ENV['APP_ENV'];
     }
 
     private function getHttpResponse($message, $code): Response

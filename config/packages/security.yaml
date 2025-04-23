@@ -3,6 +3,8 @@ security:
 
   password_hashers:
     Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface: 'auto'
+    App\Domain\Entity\User:
+      algorithm: auto
 
   # https://symfony.com/doc/current/security.html#loading-the-user-the-user-provider
   providers:
@@ -15,33 +17,14 @@ security:
     dev:
       pattern: ^/(_(profiler|wdt)|css|images|js)/
       security: false
-
-    login:
-      pattern: ^/api/login_check
-      stateless: true
+    main:
+      lazy: true
       provider: app_user_provider
-      json_login:
-        check_path: /api/login_check
-        username_path: email
-        password_path: password
-        success_handler: lexik_jwt_authentication.handler.authentication_success
-        failure_handler: lexik_jwt_authentication.handler.authentication_failure
-
-    refresh:
-      pattern: ^/api/token/refresh
+      custom_authenticator: App\Application\Security\JwtAuthenticator
       stateless: true
-      provider: app_user_provider
-      refresh_jwt: ~
-
-    api:
-      pattern: ^/api
-      stateless: true
-      provider: app_user_provider
-      jwt: ~
+      entry_point: App\Application\Security\JwtAuthenticator
 
   access_control:
-    - { path: ^/api/doc, roles: PUBLIC_ACCESS }
-    - { path: ^//api/doc.json, roles: PUBLIC_ACCESS }
-    - { path: ^/api/login_check, roles: PUBLIC_ACCESS }
-    - { path: ^/api/token/refresh, roles: PUBLIC_ACCESS }
-    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+    - { path: ^/api/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api/refresh-token, roles: PUBLIC_ACCESS }
+    - { path: ^/api, roles: ROLE_USER }
