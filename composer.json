@@ -31,12 +31,16 @@
         "symfony/twig-bundle": "7.2.*",
         "symfony/validator": "7.2.*",
         "symfony/yaml": "7.2.*",
-        "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/extra-bundle": "^2.12|^3.20",
+        "twig/twig": "^2.12|^3.20"
     },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^4.1",
-        "friendsofphp/php-cs-fixer": "^3.75.0"
+        "friendsofphp/php-cs-fixer": "^3.75.0",
+        "phpunit/phpunit": "^12.1",
+        "symfony/browser-kit": "7.2.*",
+        "symfony/css-selector": "7.2.*",
+        "symfony/phpunit-bridge": "^7.2"
     },
     "config": {
         "allow-plugins": {

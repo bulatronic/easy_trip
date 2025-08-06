@@ -12,6 +12,8 @@ interface BookingRepositoryInterface
 
     public function remove(Booking $booking): void;
 
+    public function findById(int $id): ?Booking;
+
     public function findByTripId(int $tripId): array;
 
     public function findByUserId(int $userId): array;
